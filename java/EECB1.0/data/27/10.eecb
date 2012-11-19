@@ -1,0 +1,21 @@
+Microsoft Releases Critical Patch For IE Zero Day Flaw
+<ENTITY COREFID="11">Microsoft (NSDQ:MSFT)</ENTITY> <EVENT COREFID="4">issued</EVENT> <ENTITY COREFID="2">an out-of-band emergency patch</ENTITY> <ENTITY COREFID="31">Wednesday</ENTITY> for <ENTITY COREFID="12">a zero-day <ENTITY COREFID="21">Internet Explorer</ENTITY> vulnerability that has <EVENT COREFID="119">opened the door</EVENT> for <ENTITY COREFID="18">hackers</ENTITY> to <EVENT COREFID="120">install</EVENT> <ENTITY COREFID="48">malware</ENTITY> on <ENTITY COREFID="40">susceptible computers</ENTITY> without <ENTITY COREFID="49">any user intervention</ENTITY></ENTITY>.
+The flaw, which is given the highest severity rating of critical, affects all versions of Microsoft's IE Web browser.
+Specifically, <ENTITY COREFID="2"><ENTITY COREFID="11">Microsoft's</ENTITY> <ENTITY COREFID="21">IE</ENTITY> update</ENTITY> <EVENT COREFID="121">affects</EVENT> <ENTITY COREFID="16">versions of <ENTITY COREFID="23"><ENTITY COREFID="34">Windows 2000 for <ENTITY COREFID="20">IE 5.01:XP</ENTITY></ENTITY>, <ENTITY COREFID="36">XP Professional</ENTITY>, <ENTITY COREFID="24">Server 2003 for <ENTITY COREFID="19">IE 6</ENTITY></ENTITY>; and <ENTITY COREFID="35">XP</ENTITY>, <ENTITY COREFID="24">Server 2003</ENTITY>, <ENTITY COREFID="32">Vista</ENTITY>, <ENTITY COREFID="25">Server 2008 for <ENTITY COREFID="22">IE 7</ENTITY></ENTITY></ENTITY>.</ENTITY>
+The vulnerability was reported after the release of Windows IE 8 Beta 2, but Microsoft still recommends in its advisory that users apply the patch.
+The IE security problem is the result of a fundamental flaw in the browser's data binding function, which ultimately leaves a hole in the memory space that can be accessed by remote hackers.
+Internet Explorer can then quit unexpectedly while in an exploitable state.
+Unlike other exploits, users have only to visit a malicious site infused with Trojans or other malware in order to become infected.
+Hackers can also entice victims to visit a specially crafted site, usually via some kind of phishing or social engineering scheme, or place infected banner ads on legitimate Web sites.
+Once users open an infected Web page, malicious downloaders are then installed on their computers, which are designed to record keystrokes and steal passwords, credit card numbers, or other financial information.
+The users' computer could also become part of a botnet, an infected network of compromised computers, operated by a central command and control center.
+Security researchers first saw evidence of attacks exploiting the IE vulnerability last week, shortly following Microsoft's ``Patch Tuesday'' monthly security bulletin release Dec. 9.
+Since then, researchers have seen active exploitation rapidly spread in the wild.
+While exact numbers of victims are difficult to precisely calculate, the number of infected computers could potentially affect hundreds of thousands or millions of computers, experts say.
+``There're people constantly looking at the code, trying to find issues like (the IE vulnerability),'' said Dave Marcus, security research and communications manager for McAfee.
+``It gets posted to the Internet very quickly.''
+McAfee Avert Labs researchers reported variants of the IE exploit that attempt to infect users via an ActiveX control that stores the malicious exploit code, stealthily running in the background of a Microsoft Word document.
+Malware is then installed on the vulnerable computer once users open up a Word document -- all without their knowledge or permission.
+``We've seen some pretty clever ways of people trying to take advantage of this,'' said Marcus.
+``It just speaks to the fact that they look for clever, very unique ways to get malware onto your system.''
+Security experts strongly recommend that users apply Microsoft's latest IE patch as soon as possible, which can be downloaded from the Microsoft Web site.

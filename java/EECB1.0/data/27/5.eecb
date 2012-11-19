@@ -1,0 +1,8 @@
+Microsoft issues emergency patch for Internet Explorer
+<ENTITY COREFID="11">Microsoft</ENTITY> has <EVENT COREFID="4">issued</EVENT> <ENTITY COREFID="2">an emergency patch for <ENTITY COREFID="11">its</ENTITY> <ENTITY COREFID="39"><ENTITY COREFID="21">Internet Explorer</ENTITY> browser</ENTITY>, aiming to <EVENT COREFID="3">fix</EVENT> <ENTITY COREFID="12">a critical flaw that <EVENT COREFID="119">allowed</EVENT> <ENTITY COREFID="18">hackers</ENTITY> to <EVENT COREFID="5">take over</EVENT> <ENTITY COREFID="40">computers</ENTITY> merely by <EVENT COREFID="126">steering</EVENT> <ENTITY COREFID="40">them</ENTITY> to <ENTITY COREFID="13">infected websites</ENTITY></ENTITY></ENTITY>.
+<ENTITY COREFID="11">Microsoft</ENTITY> <ENTITY COREFID="31">Wednesday</ENTITY> took the rare step of <EVENT COREFID="4">issuing</EVENT> <ENTITY COREFID="2">the patch</ENTITY> after <ENTITY COREFID="28">numerous security experts</ENTITY> <EVENT COREFID="6">advised</EVENT> <ENTITY COREFID="47">people</ENTITY> to <EVENT COREFID="127">switch</EVENT> to <ENTITY COREFID="50">rival browsers</ENTITY> until <ENTITY COREFID="11">Microsoft</ENTITY> <EVENT COREFID="3">fixed</EVENT> <ENTITY COREFID="12">the problem</ENTITY>.
+Microsoft usually releases patches on a set schedule and this is only the third emergency patch in the last three years.
+The flaw has been in circulation since the first week of December.
+So far, more than two million computers are believed to have been infected, according to PC Magazine.
+The vulnerabilities are found on copies of Internet Explorer 7, as well as IE6 and IE5.
+The patch is designed to prevent attackers from downloading malware onto users' computers if they visit a malicious Web site, or a legitimate Web site that has been infected.

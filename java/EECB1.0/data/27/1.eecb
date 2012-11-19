@@ -1,0 +1,14 @@
+Internet Explorer issue 'fixed', say Microsoft
+<ENTITY COREFID="11">Microsoft</ENTITY> has <EVENT COREFID="1">said</EVENT> that <ENTITY COREFID="2">an emergency security update</ENTITY> has <EVENT COREFID="3">fixed</EVENT> <ENTITY COREFID="12">a flaw in <ENTITY COREFID="21">Internet Explorer</ENTITY> that left <ENTITY COREFID="40">millions of computers</ENTITY> vulnerable to <EVENT COREFID="5"><EVENT COREFID="5">hacking</EVENT> and <EVENT COREFID="5">hijack</EVENT></EVENT></ENTITY> .
+<ENTITY COREFID="2">The software patch, which was <EVENT COREFID="4">released</EVENT> <ENTITY COREFID="45">last night</ENTITY>,</ENTITY> has <EVENT COREFID="3">closed</EVENT> <ENTITY COREFID="12">a loophole that has seen <ENTITY COREFID="40">the computers of <ENTITY COREFID="17">at least two million users</ENTITY></ENTITY> <EVENT COREFID="5">hacked</EVENT> by <ENTITY COREFID="18">cyber criminals</ENTITY></ENTITY>.
+The problem related to a ``zero day'' flaw that tricked people into visiting an infected website, enabling hackers to gain access to online banking passwords and e-shopping logon details.
+``<ENTITY COREFID="11">Microsoft</ENTITY> has <EVENT COREFID="4">released</EVENT> <ENTITY COREFID="2">a security update for <ENTITY COREFID="21">Internet Explorer</ENTITY> that will help <EVENT COREFID="117">protect</EVENT> <ENTITY COREFID="47"><ENTITY COREFID="11">its</ENTITY> customers</ENTITY> from <EVENT COREFID="5">malicious attacks</EVENT></ENTITY> ,'' <EVENT COREFID="1">said</EVENT> <ENTITY COREFID="11">the company</ENTITY> in <ENTITY COREFID="14">a statement</ENTITY>.
+``Like a vaccine developed to fight a virus, this 'security update' will protect computers only if it is installed.''
+Computers that are set to automatically update and install software will already be protected by the patch.
+Those users who manage their own updates are advised to download the fix as soon as possible from the Microsoft website.
+``When the patch is released, people should run, not walk, to get it installed,'' said Paul Ferguson, a researcher with Trend Micro.
+``This vulnerability is being actively exploited by cyber criminals and getting worse every day.''
+It is thought that the security flaw, which came to light earlier this week, was exposed by accident, after a Chinese security firm, Knowsec, released details of the loophole believing Microsoft had already issued a software fix to resolve it.
+However, technology experts have warned that malware authors, who write the viruses and code that exploits security vulnerabilities, are already working on ways to get around the software update.
+``We are seeing customised versions of the IE 7 exploit with varying degrees of obfuscation,'' wrote McAfee security expert Rahul Mohandas on the company blog.
+``Malware authors have been coming up with innovative mechanisms to leverage this exploit to social engineer the not so tech-savvy internet users.''
