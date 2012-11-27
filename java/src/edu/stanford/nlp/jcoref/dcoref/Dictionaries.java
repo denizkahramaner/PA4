@@ -470,7 +470,7 @@ public class Dictionaries {
   }
 
   public Dictionaries(Properties props) {
-    /*this(props.getProperty(Constants.DEMONYM_PROP, DefaultPaths.DEFAULT_DCOREF_DEMONYM),
+    this(props.getProperty(Constants.DEMONYM_PROP, DefaultPaths.DEFAULT_DCOREF_DEMONYM),
         props.getProperty(Constants.ANIMATE_PROP, DefaultPaths.DEFAULT_DCOREF_ANIMATE),
         props.getProperty(Constants.INANIMATE_PROP, DefaultPaths.DEFAULT_DCOREF_INANIMATE),
         props.getProperty(Constants.MALE_PROP, DefaultPaths.DEFAULT_DCOREF_MALE),
@@ -484,14 +484,14 @@ public class Dictionaries {
         props.getProperty(Constants.STATES_PROVINCES_PROP, DefaultPaths.DEFAULT_DCOREF_STATES_AND_PROVINCES),
         props.getProperty(Constants.EXTRA_GENDER_PROP, DefaultPaths.DEFAULT_DCOREF_EXTRA_GENDER),
         props.getProperty(Constants.SCHEMAS_PROP, "/scr/heeyoung/coref/jcoref/baseline/schemas.txt"),  // temporary to avoid change core
-        props.getProperty(Constants.THESAURUS_VERB_PROP, "/scr/heeyoung/corpus/DekangLinSyntaxBasedThesaurus/simV.lsp"),
-        props.getProperty(Constants.THESAURUS_NOUN_PROP, "/scr/heeyoung/corpus/DekangLinSyntaxBasedThesaurus/simN.lsp"),
-        props.getProperty(Constants.THESAURUS_ADJ_PROP, "/scr/heeyoung/corpus/DekangLinSyntaxBasedThesaurus/simA.lsp"),
+        props.getProperty(Constants.THESAURUS_VERB_PROP, "C:\\Users\\aman313\\Documents\\study\\cs224n\\Final\\DekangLinSyntaxBasedThesaurus\\simV.lsp"),
+        props.getProperty(Constants.THESAURUS_NOUN_PROP, "C:\\Users\\aman313\\Documents\\study\\cs224n\\Final\\DekangLinSyntaxBasedThesaurus\\simN.lsp"),
+        props.getProperty(Constants.THESAURUS_ADJ_PROP, "C:\\Users\\aman313\\Documents\\study\\cs224n\\Final\\DekangLinSyntaxBasedThesaurus\\simA.lsp"),
         props.getProperty(Constants.COREF_DICT, "/user/recasens/data/corefdict/dict-patterns-techmeme"),
         props.getProperty(Constants.COREF_DICT_NPMI, "/user/recasens/data/corefdict/col1-npmi"),
         props.getProperty(Constants.CONTEXT_SIGNATURES, "/user/mattcan/scr/signatures.txt"),
         Boolean.parseBoolean(props.getProperty(Constants.BIG_GENDER_NUMBER_PROP, "false")) ||
-        Boolean.parseBoolean(props.getProperty(Constants.REPLICATECONLL_PROP, "false")));*/
+        Boolean.parseBoolean(props.getProperty(Constants.REPLICATECONLL_PROP, "false")));
   }
 
   public Dictionaries(
@@ -525,7 +525,7 @@ public class Dictionaries {
     loadCountriesLists(countries);
     loadStatesLists(states);
     loadExtraGender(extraGender);
-    loadSchemas(schemas);
+    //loadSchemas(schemas);
     loadThesaurus(thesaurusVerbFile, thesaurusVerb);
     loadThesaurus(thesaurusNounFile, thesaurusNoun);
     loadThesaurus(thesaurusAdjFile, thesaurusAdj);

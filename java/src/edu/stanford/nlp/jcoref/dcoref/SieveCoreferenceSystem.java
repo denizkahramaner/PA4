@@ -32,6 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -948,12 +949,14 @@ public class SieveCoreferenceSystem {
 
   public static String getConllEvalSummary(String conllMentionEvalScript,
       String goldFile, String predictFile, String metric) throws IOException {
-    ProcessBuilder process = new ProcessBuilder(conllMentionEvalScript, metric, goldFile, predictFile, "none");
+    ProcessBuilder process = new ProcessBuilder(/*"C:\\strawberry\\perl\\bin\\perl.exe",*/conllMentionEvalScript, metric, goldFile, predictFile, "none");
     StringOutputStream errSos = new StringOutputStream();
     StringOutputStream outSos = new StringOutputStream();
     PrintWriter out = new PrintWriter(outSos);
     PrintWriter err = new PrintWriter(errSos);
-    SystemUtils.run(process, out, err);
+    //System.out.println(/*"C:\\strawberry\\perl\\bin\\perl.exe " +*/ conllMentionEvalScript+ " "+ metric+ " "+ goldFile+ " "+ predictFile+ " none");
+    //Process p = Runtime.getRuntime().exec("C:\\strawberry\\perl\\bin\\perl.exe " + conllMentionEvalScript+ " "+ metric+ " "+ goldFile+ " "+ predictFile+ " none");
+    SystemUtils.run( process, out, err);
     out.close();
     err.close();
     String summary = outSos.toString();
@@ -961,6 +964,16 @@ public class SieveCoreferenceSystem {
     if (errStr.length() > 0) {
       summary += "\nERROR: " + errStr;
     }
+    String line;
+    //String summary =  null;
+    
+    //BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()) );
+   // while ((line = in.readLine()) != null) {
+    //	summary = summary + line;
+    //}
+    //in.close();
+    //String summary = p.getInputStream().toString();
+    		
     return summary;
   }
 

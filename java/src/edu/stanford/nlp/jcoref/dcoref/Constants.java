@@ -48,7 +48,7 @@ public class Constants {
   public static final boolean PRINT_CONLL_OUTPUT = true; // was false
 
   /** Default path for conll scorer script */
-  public static final String conllMentionEvalScript = "/scr/nlp/data/conll-2011/scorer/v4/scorer.pl";
+  public static final String conllMentionEvalScript = "C:\\Users\\aman313\\Documents\\study\\cs224n\\Final\\scorer\\v4\\scorer.bat";
 
   /** if true, skip coreference resolution. do mention detection only */
   public static final boolean SKIP_COREF = false;

@@ -51,7 +51,7 @@ import edu.stanford.nlp.util.Triple;
 
 public class RuleBasedJointCorefSystem {
   public static final Logger logger = Logger.getLogger(RuleBasedJointCorefSystem.class.getName());
-  private static final String logPath = "/scr/heeyoung/coref/jcoref/baseline/cross/";
+  private static final String logPath = "C:\\Users\\aman313\\Documents\\study\\cs224n\\Final\\";
   public static final String conllMentionEvalScript = Constants.conllMentionEvalScript;
   private static final boolean doPostProcessing = true;
   //  private static final String serDocs = "/u/heeyoung/corpus-jcb/sample_ser/jcbDocs.ser";
@@ -301,11 +301,11 @@ public class RuleBasedJointCorefSystem {
     FileHandler fh;
     try {
       String logFileName = props.getProperty("jcoref.logFile", "log.txt");
-      if(logFileName.endsWith(".txt")) {
-        logFileName = logFileName.substring(0, logFileName.length()-4) +"_"+ timeStamp+".txt";
-      } else {
-        logFileName = logFileName + "_"+ timeStamp+".txt";
-      }
+      //if(logFileName.endsWith(".txt")) {
+        //logFileName = logFileName.substring(0, logFileName.length()-4) +"_"+ timeStamp+".txt";
+      //} else {
+       // logFileName = logFileName + "_"+ timeStamp+".txt";
+      //}
       fh = new FileHandler(logFileName, false);
       logger.addHandler(fh);
       logger.setLevel(Level.FINE);
@@ -361,9 +361,10 @@ public class RuleBasedJointCorefSystem {
       logger.fine("use strict mention boundary: "+Constants.STRICT_MENTION_BOUNDARY);
 
       // prepare conll output
-      conllOutput = props.getProperty(Constants.CONLL_OUTPUT_PROP, logPath+"/conlloutput/conlloutput");
+      conllOutput = props.getProperty(Constants.CONLL_OUTPUT_PROP, logPath+"conlloutput\\conlloutput");
       conllWriter = new CoNLLOutputWriter();
-      conllWriter.initialize(conllOutput+"-"+timeStamp+"-iter"+props.getProperty("iteration"));
+     // conllWriter.initialize(conllOutput+"-"+timeStamp+"-iter"+props.getProperty("iteration"));
+      conllWriter.initialize(conllOutput+"-iter"+props.getProperty("iteration"));
     }
     String serializedCorpus = props.getProperty("jcoref.readserializedPath", jcbSerDocPath);
     /*if(corefSystem.jcc.regressor!=null) {
@@ -389,7 +390,9 @@ public class RuleBasedJointCorefSystem {
         // print conll output before coref
         printConllOutput(jDoc, conllWriter, false);
         conllWriterOneDoc = new CoNLLOutputWriter();
-        conllWriterOneDoc.initialize(conllOutput+timeStamp+"-iter"+props.getProperty("iteration")+"-temp", true);
+       // conllWriterOneDoc.initialize(conllOutput+timeStamp+"-iter"+props.getProperty("iteration")+"-temp", true);
+        conllWriterOneDoc.initialize(conllOutput+"-iter"+props.getProperty("iteration")+"-temp", true);
+
         printConllOutput(jDoc, conllWriterOneDoc, false);
       }
 
