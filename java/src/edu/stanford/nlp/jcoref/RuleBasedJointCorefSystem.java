@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,14 @@ import java.util.Set;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.ejml.data.Matrix64F;
+import org.ejml.simple.SimpleMatrix;
+
+import cs224n.util.Pair;
+
+import sun.java2d.pipe.SpanShapeRenderer.Simple;
+import sun.security.krb5.internal.crypto.CksumType;
 
 //import edu.stanford.nlp.classify.LinearRegressor;
 import edu.stanford.nlp.io.IOUtils;
@@ -43,7 +52,7 @@ import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.stats.ClassicCounter;
 import edu.stanford.nlp.stats.Counter;
-//import edu.stanford.nlp.stats.OpenAddressCounter;
+import edu.stanford.nlp.stats.ClassicCounter;
 import edu.stanford.nlp.util.CoreMap;
 import edu.stanford.nlp.util.IntTuple;
 import edu.stanford.nlp.util.StringUtils;
@@ -220,7 +229,7 @@ public class RuleBasedJointCorefSystem {
     try {
       String logFileName = props.getProperty("jcoref.logFile", "log.txt");
       if(logFileName.endsWith(".txt")) {
-        logFileName = logFileName.substring(0, logFileName.length()-4) +"_"+ timeStamp+".txt";
+        //logFileName = logFileName.substring(0, logFileName.length()-4) +"_"+ timeStamp+".txt";
       } else {
         logFileName = logFileName + "_"+ timeStamp+".txt";
       }
@@ -407,6 +416,11 @@ public class RuleBasedJointCorefSystem {
       // postprocessing
       // TODO
       if(doPostProcessing) postProcessing(jDoc);
+      
+      
+      spectralCoCluster(jDoc); // maybe this needs to be done before the postprocessing
+      
+      
 
       logger.fine("Doc "+jDoc.docID+" processed");
 
@@ -505,6 +519,225 @@ public class RuleBasedJointCorefSystem {
     return score;
   }
 
+ public void spectralCoCluster(JointCorefDocument doc){
+	 
+	 /*
+	  * Spectral Constraint Modeling algorithm 
+	  */
+	 
+	 // Construct the Bipartite edge matrix E and Constraint matrix C
+	 //constructBandC(doc);
+	 ArrayList<SimpleMatrix> matrices= constructEandC(doc);
+	 
+	 // We have the input matrices. Now time to do the clustering
+	 double delta = 1.0; // TODO : Take this in as a parameter 
+	 int k = 5;
+	 int l = 5; // need to set these smarter 
+	 ArrayList<SimpleMatrix> partitionMatrices = scm(matrices.get(0),matrices.get(1),delta,k,l);
+	 
+	 // Now process the partitionMatrices to get the new clustering
+	 
+	 Map<Integer,CorefCluster>  finalClusters = getClustering(partitionMatrices);
+	 
+ }
+ 
+ public Map<Integer, CorefCluster> getClustering(ArrayList<SimpleMatrix> partitionMatrices){
+	 
+	 return null;
+ }
+ 
+ public ArrayList<SimpleMatrix> scm(SimpleMatrix E, SimpleMatrix C, double confPar, int k, int l){
+	 
+	 return null;
+ }
+ 
+ // We make this global in order to map back from the matrix index to the mentions
+ // Note that we shall structure the matrix such that verb mentions are in rows and other mention in cols 
+ // in case that the matrix dimention contains both the verb and the other mentions then the other mentions appear afte the verbs
+ // the order within both kind of mentions is preseved to be the same as these lists 
+ ArrayList<Mention> verbMentions = new ArrayList<Mention>();
+ ArrayList<Mention> otherMentions = new ArrayList<Mention>(); // This is the list of other mentions; Mostly should be nominal and pronominal
+ 
+ Map<Integer,Pair<Mention, Integer>> verbMentionMap = new HashMap<Integer, Pair<Mention,Integer>>();
+ Map<Integer,Pair<Mention, Integer>> otherMentionMap = new HashMap<Integer, Pair<Mention,Integer>>();
+ 
+ 
+ ArrayList<SimpleMatrix> constructEandC(JointCorefDocument doc){
+	 
+	 //Map<Integer,CorefCluster>  clusters = doc.corefClusters;
+	 /*
+	  * Go through all the clusters 
+	  *   for each mention in a cluster. 
+	  *   	if the mention is of type noun 
+	  *   		increase noun count
+	  *   		
+	  *   	if the mention is of type verb
+	  */
+	 
+	 //Set<Integer> clusterIds = clusters.keySet();
+	 int id;
+	 //verbMentions.clear();
+	 //otherMentions.clear();
+	 verbMentionMap.clear();
+	 otherMentionMap.clear();
+	 
+	 int numVerbs =0;
+	 int numOthers =0;
+	/* Iterator<Integer> clusterIdsIterator = clusterIds.iterator();
+	 while( clusterIdsIterator.hasNext()){
+		 id =  clusterIdsIterator.next();
+		 CorefCluster cluster = clusters.get(id);
+		 Iterator<Mention> clusterIterator = cluster.getCorefMentions().iterator();
+		 while(clusterIterator.hasNext()){
+			 Mention m = clusterIterator.next();
+			 if(m.isVerb){
+				 verbMentions.add(m);
+				 numVerbs++;
+			 }
+			 else{
+				 otherMentions.add(m);
+				 numOthers++;
+			 }
+			 
+		 }
+		 
+	 }*/
+	 
+	 Iterator<List<Mention>> listIterator = doc.getOrderedMentions().iterator();
+	 while(listIterator.hasNext()){
+		 Iterator< Mention> mentionIterator = listIterator.next().iterator();
+		 while(mentionIterator.hasNext()){
+			 Mention m = mentionIterator.next();
+			 if(m.isVerb){
+				 verbMentionMap.put(m.hashCode(), new Pair<>(m, numVerbs));
+				 numVerbs++;
+			 }
+			 else{
+				 otherMentionMap.put(m.hashCode(), new Pair<>(m, numOthers));
+				 numOthers++;
+			 }
+		 }
+		 
+	 }
+	 
+	 
+	 // Mentions have been sorted into two lists 
+	 // Now we can initialize the matrices 
+	 int numVerbMentions = verbMentions.size();
+	 int numOtherMentions = otherMentions.size();
+	 
+	 SimpleMatrix E = new SimpleMatrix(numVerbMentions, numOtherMentions); 
+	 SimpleMatrix C = new SimpleMatrix(numOtherMentions+numVerbMentions, numOtherMentions+numVerbMentions);
+	 
+	 
+	 // Now we need to populate these matrices 
+	 // We do this the dumb way for now 
+	 int verbIndex = 0;
+	 int otherIndex =0;
+	 Iterator<Integer> verbMentions = verbMentionMap.keySet().iterator();
+	 while(verbMentions.hasNext()){
+		 int verbMentionCode = verbMentions.next();
+		 Mention verbMention = verbMentionMap.get(verbMentionCode).getFirst();
+		 Iterator<Integer> otherMentions = otherMentionMap.keySet().iterator();
+		 verbIndex =  verbMentionMap.get(verbMentionCode).getSecond();
+		 while(otherMentions.hasNext()){
+			 int otherMentionCode = otherMentions.next();
+			 Mention otherMention = otherMentionMap.get(otherMentionCode).getFirst();
+			 // Check if the other mention is an argument of the verbmention. If yes set the Eij
+			 otherIndex =  otherMentionMap.get(otherMentionCode).getSecond();
+			 E.set(verbIndex, otherIndex, 0.0);
+			 double weight = argLikelihood(verbMention.srlArgs,otherMention);
+			 if( weight> 0.2){ // If the likehood is not too low, use this score as an ed
+				 
+				 E.set(verbIndex, otherIndex, weight);
+			 }
+			 if(verbMention.corefClusterID == otherMention.corefClusterID){
+				 C.set(verbIndex, otherIndex, 1);
+
+			 }
+			 
+			 otherIndex++;
+		 }
+		 		 
+		 verbIndex++;
+	 } // E matrix constructed
+	  
+	 //Now construct the C matrix 
+	 // This is a square matrix and each 
+	 verbMentions = verbMentionMap.keySet().iterator();
+	 while(verbMentions.hasNext()){
+		 int verbMentionCode = verbMentions.next();
+		 Mention verbMention = verbMentionMap.get(verbMentionCode).getFirst();
+		 Iterator<Integer> otherMentions = otherMentionMap.keySet().iterator();
+		 verbIndex =  verbMentionMap.get(verbMentionCode).getSecond();
+	 
+		 Iterator<Integer> verbMentions1 = verbMentionMap.keySet().iterator();
+		 while(verbMentions1.hasNext()){
+			
+			 int verbMentionCode1 = verbMentions1.next();
+			 Mention verbMention1 = verbMentionMap.get(verbMentionCode1).getFirst();
+			 int verbIndex1 =  verbMentionMap.get(verbMentionCode).getSecond();
+			 if(verbMention.corefClusterID == verbMention1.corefClusterID){
+				 C.set(verbIndex, verbIndex1, 1);
+			 }
+	 
+		 }
+	}	 
+	 
+	 Iterator<Integer> otherMentions = otherMentionMap.keySet().iterator();
+	 while(otherMentions.hasNext()){
+		 int otherMentionCode = otherMentions.next();
+		 Mention otherMention = otherMentionMap.get(otherMentionCode).getFirst();
+		 // Check if the other mention is an argument of the verbmention. If yes set the Eij
+		 otherIndex =  otherMentionMap.get(otherMentionCode).getSecond();
+		 Iterator<Integer> otherMentions1 = otherMentionMap.keySet().iterator();
+		 while(otherMentions1.hasNext()){
+			 int otherMentionCode1 = otherMentions1.next();
+			 Mention otherMention1 = otherMentionMap.get(otherMentionCode1).getFirst();
+			 // Check if the other mention is an argument of the verbmention. If yes set the Eij
+			 int otherIndex1 =  otherMentionMap.get(otherMentionCode1).getSecond();
+			 if(otherMention.corefClusterID == otherMention1.corefClusterID){
+				 C.set(otherIndex, otherIndex1, 1);				 
+			 }
+			 
+		 }
+	 }
+	 
+	 ArrayList<SimpleMatrix> matrices = new ArrayList<SimpleMatrix>();
+	 matrices.add(E);
+	 matrices.add(C);
+	 
+	 return matrices;
+ }
+ 
+ public double argLikelihood(Map<String,Mention> srl, Mention other){
+	 double score = 0.0;
+	 double totalscore = 3;
+	 
+	 if(srl.get("A0")!=null && srl.get("A0").headString.equalsIgnoreCase(other.headString)){
+		 score = score +1;
+	 }
+	 
+	 if(srl.get("A1")!=null && srl.get("A1").headString.equalsIgnoreCase(other.headString)){
+		 score = score+1;
+	 }
+	 
+	 
+	 if(srl.get("A2")!=null && srl.get("A2").headString.equalsIgnoreCase(other.headString)){
+		 score = score+1;
+	 }
+
+	 if(srl.get("A0")!=null && srl.get("A0").gendersAgree(other)){
+		 score = score +0.5;
+	 }
+	 
+	 if(srl.get("A1")!=null && srl.get("A1").gendersAgree(other)){
+		 score = score +0.5;
+	 }
+
+	 return score/totalscore;
+ }
+  
   public void withinDocCoref(MentionExtractor mentionExtractor, Properties props) throws Exception {
     boolean STORE_SERIALZIED = Boolean.parseBoolean(props.getProperty("jcoref.storeserialized", "false"));
 
@@ -935,10 +1168,10 @@ public class RuleBasedJointCorefSystem {
       doc.append("New TOPIC ").append(document.docID).append(": (Predicted Mentions) ==================================================\n");
     }
 
-    //Counter<Integer> mentionCount = new OpenAddressCounter<Integer>();
+    Counter<Integer> mentionCount = new ClassicCounter<Integer>();
     for(List<Mention> l : allMentions) {
       for(Mention m : l){
-       // mentionCount.incrementCount(m.goldCorefClusterID);
+        mentionCount.incrementCount(m.goldCorefClusterID);
       }
     }
 
@@ -947,13 +1180,13 @@ public class RuleBasedJointCorefSystem {
       List<Mention> mentions = allMentions.get(i);
 
       String[] tokens = sentence.get(TextAnnotation.class).split(" ");
-      //Counter<Integer> startCounts = new OpenAddressCounter<Integer>();
-      //Counter<Integer> endCounts = new OpenAddressCounter<Integer>();
+      Counter<Integer> startCounts = new ClassicCounter<Integer>();
+      Counter<Integer> endCounts = new ClassicCounter<Integer>();
       HashMap<Integer, Set<Mention>> endMentions = new HashMap<Integer, Set<Mention>>();
       for (Mention m : mentions) {
         if(m.isEvent) continue;
-       // startCounts.incrementCount(m.startIndex);
-        //endCounts.incrementCount(m.endIndex);
+        startCounts.incrementCount(m.startIndex);
+        endCounts.incrementCount(m.endIndex);
         if(!endMentions.containsKey(m.endIndex)) endMentions.put(m.endIndex, new HashSet<Mention>());
         endMentions.get(m.endIndex).add(m);
       }
@@ -964,11 +1197,11 @@ public class RuleBasedJointCorefSystem {
             doc.append("]_").append(corefChainId);
           }
         }
-        /*for (int k = 0 ; k < startCounts.getCount(j) ; k++) {
+        for (int k = 0 ; k < startCounts.getCount(j) ; k++) {
           char lastChar = (doc.length() > 0)? doc.charAt(doc.length()-1):' ';
           if (lastChar != '[') doc.append(" ");
           doc.append("[");
-        }*/
+        }
         doc.append(" ");
         doc.append(tokens[j]);
       }
