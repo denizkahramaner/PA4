@@ -558,8 +558,8 @@ public class RuleBasedJointCorefSystem {
  ArrayList<Mention> verbMentions = new ArrayList<Mention>();
  ArrayList<Mention> otherMentions = new ArrayList<Mention>(); // This is the list of other mentions; Mostly should be nominal and pronominal
  
- Map<Integer,Pair<Mention, Integer>> verbMentionMap = new HashMap<Integer, Pair<Mention,Integer>>();
- Map<Integer,Pair<Mention, Integer>> otherMentionMap = new HashMap<Integer, Pair<Mention,Integer>>();
+ Map<Integer,Mention> verbMentionMap = new HashMap<Integer, Mention>();
+ Map<Integer,Mention> otherMentionMap = new HashMap<Integer, Mention>();
  
  
  ArrayList<SimpleMatrix> constructEandC(JointCorefDocument doc){
@@ -609,11 +609,11 @@ public class RuleBasedJointCorefSystem {
 		 while(mentionIterator.hasNext()){
 			 Mention m = mentionIterator.next();
 			 if(m.isVerb){
-				 verbMentionMap.put(m.hashCode(), new Pair<>(m, numVerbs));
+				 verbMentionMap.put(numVerbs, m);
 				 numVerbs++;
 			 }
 			 else{
-				 otherMentionMap.put(m.hashCode(), new Pair<>(m, numOthers));
+				 otherMentionMap.put(numOthers, m);
 				 numOthers++;
 			 }
 		 }
@@ -623,8 +623,8 @@ public class RuleBasedJointCorefSystem {
 	 
 	 // Mentions have been sorted into two lists 
 	 // Now we can initialize the matrices 
-	 int numVerbMentions = verbMentions.size();
-	 int numOtherMentions = otherMentions.size();
+	 int numVerbMentions = verbMentionMap.size();
+	 int numOtherMentions = otherMentionMap.size();
 	 
 	 SimpleMatrix E = new SimpleMatrix(numVerbMentions, numOtherMentions); 
 	 SimpleMatrix C = new SimpleMatrix(numOtherMentions+numVerbMentions, numOtherMentions+numVerbMentions);
@@ -637,14 +637,14 @@ public class RuleBasedJointCorefSystem {
 	 Iterator<Integer> verbMentions = verbMentionMap.keySet().iterator();
 	 while(verbMentions.hasNext()){
 		 int verbMentionCode = verbMentions.next();
-		 Mention verbMention = verbMentionMap.get(verbMentionCode).getFirst();
+		 Mention verbMention = verbMentionMap.get(verbMentionCode);
 		 Iterator<Integer> otherMentions = otherMentionMap.keySet().iterator();
-		 verbIndex =  verbMentionMap.get(verbMentionCode).getSecond();
+		 verbIndex =  verbMentionCode;
 		 while(otherMentions.hasNext()){
 			 int otherMentionCode = otherMentions.next();
-			 Mention otherMention = otherMentionMap.get(otherMentionCode).getFirst();
+			 Mention otherMention = otherMentionMap.get(otherMentionCode);
 			 // Check if the other mention is an argument of the verbmention. If yes set the Eij
-			 otherIndex =  otherMentionMap.get(otherMentionCode).getSecond();
+			 otherIndex =  otherMentionCode;
 			 E.set(verbIndex, otherIndex, 0.0);
 			 double weight = argLikelihood(verbMention.srlArgs,otherMention);
 			 if( weight> 0.2){ // If the likehood is not too low, use this score as an ed
@@ -667,16 +667,16 @@ public class RuleBasedJointCorefSystem {
 	 verbMentions = verbMentionMap.keySet().iterator();
 	 while(verbMentions.hasNext()){
 		 int verbMentionCode = verbMentions.next();
-		 Mention verbMention = verbMentionMap.get(verbMentionCode).getFirst();
+		 Mention verbMention = verbMentionMap.get(verbMentionCode);
 		 Iterator<Integer> otherMentions = otherMentionMap.keySet().iterator();
-		 verbIndex =  verbMentionMap.get(verbMentionCode).getSecond();
+		 verbIndex =  verbMentionCode;
 	 
 		 Iterator<Integer> verbMentions1 = verbMentionMap.keySet().iterator();
 		 while(verbMentions1.hasNext()){
 			
 			 int verbMentionCode1 = verbMentions1.next();
-			 Mention verbMention1 = verbMentionMap.get(verbMentionCode1).getFirst();
-			 int verbIndex1 =  verbMentionMap.get(verbMentionCode).getSecond();
+			 Mention verbMention1 = verbMentionMap.get(verbMentionCode1);
+			 int verbIndex1 =  verbMentionCode1;
 			 if(verbMention.corefClusterID == verbMention1.corefClusterID){
 				 C.set(verbIndex, verbIndex1, 1);
 			 }
@@ -687,15 +687,15 @@ public class RuleBasedJointCorefSystem {
 	 Iterator<Integer> otherMentions = otherMentionMap.keySet().iterator();
 	 while(otherMentions.hasNext()){
 		 int otherMentionCode = otherMentions.next();
-		 Mention otherMention = otherMentionMap.get(otherMentionCode).getFirst();
+		 Mention otherMention = otherMentionMap.get(otherMentionCode);
 		 // Check if the other mention is an argument of the verbmention. If yes set the Eij
-		 otherIndex =  otherMentionMap.get(otherMentionCode).getSecond();
+		 otherIndex =  otherMentionCode;
 		 Iterator<Integer> otherMentions1 = otherMentionMap.keySet().iterator();
 		 while(otherMentions1.hasNext()){
 			 int otherMentionCode1 = otherMentions1.next();
-			 Mention otherMention1 = otherMentionMap.get(otherMentionCode1).getFirst();
+			 Mention otherMention1 = otherMentionMap.get(otherMentionCode1);
 			 // Check if the other mention is an argument of the verbmention. If yes set the Eij
-			 int otherIndex1 =  otherMentionMap.get(otherMentionCode1).getSecond();
+			 int otherIndex1 =  otherMentionCode1;
 			 if(otherMention.corefClusterID == otherMention1.corefClusterID){
 				 C.set(otherIndex, otherIndex1, 1);				 
 			 }
